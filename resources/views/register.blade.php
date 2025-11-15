@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriKnows Sign up</title>
+  <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+  <script type="module" src="{{ asset('js/register.js') }}" defer></script>
+</head>
+
+<body>
+
+  <div class="left"></div>
+
+  <div class="container">
+    <div class="box form-box">
+
+      <header>
+        Mabuhay!
+        <span>Welcome to AgriKnows</span>
+        <br>
+        <small>CREATE AN ACCOUNT TO CONTINUE</small>
+        <h2>Sign Up</h2>
+      </header>
+
+      <!--button and text field-->
+      <form action="{{ url('/register') }}" method="post">
+        @csrf
+        <div class="field input">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required>
+        </div>
+
+        <div class="field input">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required>
+        </div>
+
+        <div class="field input password-field">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+            <img src="{{ asset('images/show.png') }}" id="togglePassword" alt="Show/Hide Password">
+        </div>
+
+        <button type="submit">SIGN UP</button>
+    </form>
+    </div>
+    <p class="signup">Already have an account?
+      <a href="/pages/login.html">Log In</a>
+    </p>
+    <div class="authenticationBTN">
+      <button id="google-login-btn">
+        <img src="{{ asset('images/google.png') }}" alt="Google">
+      </button>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+
+  <script type="module">
+    //dating register js
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDxTSnDc-z4wJ4fL9zf3kB3uuvZjcISNjQ",
+      authDomain: "login-agriknows.firebaseapp.com",
+      projectId: "login-agriknows",
+      storageBucket: "login-agriknows.firebasestorage.app",
+      messagingSenderId: "281355587751",
+      appId: "1:281355587751:web:fb479b62b5036b44b68b82",
+    };
+
+
+    //show pass
+    document.addEventListener('DOMContentLoaded', () => {
+      const togglePassword = document.getElementById('togglePassword');
+      const password = document.getElementById('password');
+
+      if (togglePassword && password) {
+        togglePassword.addEventListener('click', (e) => {
+          const isPasswordHidden = password.getAttribute('type') === 'password';
+
+          // Toggle password visibility
+          password.setAttribute('type', isPasswordHidden ? 'text' : 'password');
+
+          // Toggle the icon image
+          togglePassword.src = isPasswordHidden
+            ? '/image/hide.png'
+            : '/image/show.png';
+        });
+      }
+    });
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    auth.languageCode = 'en'
+    const provider = new GoogleAuthProvider();
+    //get ref to database services
+    const db = getDatabase(app);
+
+    document.getElementById("submit").addEventListener('click', function (e) {
+      e.preventDefault();
+      set(ref(db, 'user/' + document.getElementById("username").value),
+        {
+          username: document.getElementById("username").value,
+          email: document.getElementById("email").value
+
+
+        });
+      alert("Account Created Successfully")
+    })
+    const googleLogin = document.getElementById("google-login-btn");
+    googleLogin.addEventListener("click", function () {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const user = result.user;
+          console.log(user);
+          window.location.href = "/index.html";
+
+        }).catch((error) => {
+
+          const errorCode = error.code;
+          const errorMessage = error.message;
+
+        });
+    })
+
+    //submit button /  signup button
+    const submit = document.getElementById("submit");
+    submit.addEventListener("click", function (event) {
+      event.preventDefault();
+
+      //inputs
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          alert("Creating Account...");
+          window.location.href = "/index.html";
+
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+
+        });
+    });
+
+
+  </script>
+
+</body>
+
+</html>

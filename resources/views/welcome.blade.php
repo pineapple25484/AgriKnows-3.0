@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/login.js" defer type="module"></script>
+    <title>ArgiKnows Homepage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+    <div id="google_translate_element"></div>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'tl', //Tagalog
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <div class="container">
+
+
+        <header>
+            <div class="header-left">
+                <img src="/image/LOGO.png" class="agri-logo" alt="AgriKnows Logo">
+                <h1>AGRIKNOWS</h1>
+            </div>
+
+            <div class="header-right">
+                <span id="username-display">
+                    {{ session('user.username', 'Guest') }}
+                </span>
+                <img src="{{ asset('images/profile.png') }}" class="user-profile" alt="User Profile"
+                    onclick="window.location.href='{{ url('/user/settings') }}'">
+            </div>
+
+        </header>
+
+        <div class="main-content">
+            <section class="crop-management">
+                <section class="crop-selector">
+                    <div id="current-date"></div>
+                    <div class="form-group">
+                        <h2><i class="fas fa-seedling"></i> Crop Management</h2>
+                        <div class="crop-controls">
+                            <button class="select-crop" id="selectCropBtn"><i class="fas fa-seedling"></i> Select
+                                Crop</button>
+                            <button class="select-crop" id="addCropBtn"><i class="fas fa-plus-circle"></i> Add Custom
+                                Crop</button>
+
+                            <div class="pump-control">
+                                <label for="pump-switch"><i
+                                        class="fas fa-faucet reading-icon pump"></i>Irrigation</label>
+                                <label class="switch"><input type="checkbox" id="pump-switch"><span
+                                        class="slider round"></span></label>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <div class="current-crop">
+                    <div class="crop-info">
+                        <div class="crop-details">
+                            <h3 id="currentCropName"><i class="fas fa-seedling"></i> No crop selected</h3>
+                            <p id="currentCropOptimal">Select a crop to see optimal conditions</p>
+                        </div>
+                        <div class="moisture-status" id="soil-moisture-status">
+                            <p>Soil Moisture:
+                                <b>Optimal</b>
+                            </p>
+                        </div>
+                    </div>
+
+            </section>
+
+            <div class="modal" id="selectCropModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Select Crop</h3>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <p>Choose a crop to set optimal environmental conditions. Custom crops can be edited.</p>
+                    <div class="crop-grid">
+                        <div class="crop-option" data-crop="corn">
+                            <i class="fas fa-seedling crop-icon-small"></i>
+                            <div class="crop-name-small">Corn</div>
+                        </div>
+                        <div class="crop-option" data-crop="rice">
+                            <i class="fas fa-seedling crop-icon-small"></i>
+                            <div class="crop-name-small">Rice</div>
+                        </div>
+                        <div class="crop-option" data-crop="wheat">
+                            <i class="fas fa-seedling crop-icon-small"></i>
+                            <div class="crop-name-small">Wheat</div>
+                        </div>
+                        <div class="crop-option" data-crop="tomato">
+                            <i class="fas fa-seedling crop-icon-small"></i>
+                            <div class="crop-name-small">Tomato</div>
+                        </div>
+                        <div class="crop-option" data-crop="lettuce">
+                            <i class="fas fa-seedling crop-icon-small"></i>
+                            <div class="crop-name-small">Lettuce</div>
+                        </div>
+                    </div>
+                    <button id="confirmCropBtn" class="btn-confirm" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-check"></i> Confirm Selection
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal" id="addCropModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add Custom Crop</h3>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <form id="addCropForm">
+                        <div class="form-group">
+                            <label class="form-label" for="customCropName">Crop Name</label>
+                            <input type="text" id="customCropName" class="form-input" placeholder="Enter crop name"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Temperature Range
+                                (°C)</label>
+                            <div class="range-inputs">
+                                <input type="number" id="tempMin" class="form-input range-input" placeholder="Min"
+                                    required>
+                                <input type="number" id="tempMax" class="form-input range-input" placeholder="Max"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Soil Moisture Range
+                                (%)</label>
+                            <div class="range-inputs">
+                                <input type="number" id="moistureMin" class="form-input range-input" placeholder="Min"
+                                    required>
+                                <input type="number" id="moistureMax" class="form-input range-input" placeholder="Max"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">pH Range</label>
+                            <div class="range-inputs">
+                                <input type="number" step="0.1" id="phMin" class="form-input range-input"
+                                    placeholder="Min" required>
+                                <input type="number" step="0.1" id="phMax" class="form-input range-input"
+                                    placeholder="Max" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Humidity Range
+                                (%)</label>
+                            <div class="range-inputs">
+                                <input type="number" id="humidityMin" class="form-input range-input" placeholder="Min"
+                                    required>
+                                <input type="number" id="humidityMax" class="form-input range-input" placeholder="Max"
+                                    required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-add" style="width: 100%; margin-top: 10px;">
+                            <i class="fas fa-plus-circle"></i> Add Custom
+                            Crop
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal" id="editDeleteCropModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="editDeleteCropTitle">Edit Crop: Crop Name</h3>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <form id="editCropForm">
+                        <input type="hidden" id="editCropKey">
+                        <div class="form-group">
+                            <label class="form-label" for="editCustomCropName">Crop Name</label>
+                            <input type="text" id="editCustomCropName" class="form-input" placeholder="Enter crop name"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Temperature Range (°C)</label>
+                            <div class="range-inputs">
+                                <input type="number" id="editTempMin" class="form-input range-input" placeholder="Min"
+                                    required>
+                                <input type="number" id="editTempMax" class="form-input range-input" placeholder="Max"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Soil Moisture Range (%)</label>
+                            <div class="range-inputs">
+                                <input type="number" id="editMoistureMin" class="form-input range-input"
+                                    placeholder="Min" required>
+                                <input type="number" id="editMoistureMax" class="form-input range-input"
+                                    placeholder="Max" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">pH Range</label>
+                            <div class="range-inputs">
+                                <input type="number" step="0.1" id="editPhMin" class="form-input range-input"
+                                    placeholder="Min" required>
+                                <input type="number" step="0.1" id="editPhMax" class="form-input range-input"
+                                    placeholder="Max" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Humidity Range (%)</label>
+                            <div class="range-inputs">
+                                <input type="number" id="editHumidityMin" class="form-input range-input"
+                                    placeholder="Min" required>
+                                <input type="number" id="editHumidityMax" class="form-input range-input"
+                                    placeholder="Max" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-confirm" style="width: 100%; margin-top: 10px;">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </form>
+                    <button id="deleteCropBtn" class="btn-delete" style="width: 100%; margin-top: 10px;">
+                        <i class="fas fa-trash"></i> Delete Crop
+                    </button>
+                </div>
+            </div>
+
+            <section class="current-status">
+                <h2><i class="fas fa-chart-line"></i> Current Status</h2>
+                <div class="current-status-grid">
+
+                    <div class="reading-card">
+                        <div class="reading-header">
+                            <i class="fas fa-thermometer-half reading-icon temperature"></i>
+                            <h3>Temperature</h3>
+                        </div>
+                        <div class="value">23.5 °C</div>
+                        <div class="optimal" id="tempOptimal">Optimal: 20-25°C</div>
+                        <div class="last-updated">Last updated: 2 min ago</div>
+                    </div>
+
+                    <div class="reading-card">
+                        <div class="reading-header">
+                            <i class="fas fa-tint reading-icon moisture"></i>
+                            <h3>Soil Moisture</h3>
+                        </div>
+                        <div class="value">42 %</div>
+                        <div class="optimal" id="moistureOptimal">Optimal: 40-60%</div>
+                        <div class="last-updated">Last updated: 10 min ago</div>
+                    </div>
+
+                    <div class="reading-card">
+                        <div class="reading-header">
+                            <i class="fas fa-flask reading-icon ph"></i>
+                            <h3>pH Level</h3>
+                        </div>
+                        <div class="value">6.8 pH</div>
+                        <div class="optimal" id="phOptimal">Optimal: 6.5-7.0</div>
+                        <div class="last-updated">Last updated: 30 min ago</div>
+                    </div>
+
+                    <div class="reading-card">
+                        <div class="reading-header">
+                            <i class="fas fa-cloud reading-icon humidity"></i>
+                            <h3>Humidity</h3>
+                        </div>
+                        <div class="value">65 %</div>
+                        <div class="optimal" id="humidityOptimal">Optimal: 60-70%</div>
+                        <div class="last-updated">Last updated: 5 min ago</div>
+                    </div>
+
+                    <div class="reading-card">
+                        <div class="reading-header">
+                            <i class="fas fa-sun reading-icon light"></i>
+                            <h3>Light Status</h3>
+                        </div>
+                        <div class="value" id="lightValue">Light</div>
+                        <div class="optimal" id="lightOptimal"> </div>
+                        <div class="last-updated">Last updated: 1 min ago</div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="data-history">
+                <div class="history-header">
+                    <h2><i class="fas fa-history"></i> Data History</h2>
+                    <div class="history-controls">
+                        <div class="time-filters">
+                            <button class="time-filter active" data-time="1h">1 Hour</button>
+                            <button class="time-filter" data-time="6h">6 Hours</button>
+                            <button class="time-filter" data-time="24h">24 Hours</button>
+                            <button class="time-filter" data-time="7d">7 Days</button>
+                        </div>
+
+                        <div class="history-actions">
+                            <button id="export-btn" class="export-btn">
+                                <i class="fas fa-download"></i> Export Data
+                            </button>
+                            <button id="graph-mode-toggle" class="graph-mode-btn">
+                                <i class="fas fa-chart-bar"></i> Graph Mode
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="history-table" class="history-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Soil Moisture</th>
+                                <th>Humidity</th>
+                                <th>Temperature</th>
+                                <th>Light Status</th>
+                                <th>pH Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-data">
+                            @forelse($sensordata as $key => $entry)
+                                <tr>
+                                    <td>{{ $entry['timestamp'] ?? '-' }}</td>
+                                    <td>{{ $entry['soilMoisture'] ?? '-' }}</td>
+                                    <td>{{ $entry['humidity'] ?? '-' }}</td>
+                                    <td>{{ $entry['temperature'] ?? '-' }}</td>
+                                    <td>{{ $entry['light'] ?? '-' }}</td>
+                                    <td>{{ $entry['pH'] ?? '-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">No data available</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <div id="history-graph" class="history-graph hidden">
+                    <div class="graph-container">
+                        <canvas id="soil-moisture-chart"></canvas>
+                    </div>
+                    <div class="graph-container">
+                        <canvas id="humidity-chart"></canvas>
+                    </div>
+                    <div class="graph-container">
+                        <canvas id="temperature-chart"></canvas>
+                    </div>
+                    <div class="graph-container">
+                        <canvas id="ph-level-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script type="module" src="js/home.js"></script>
+    <footer>
+        <p>© 2025 AgriKnows. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
