@@ -31,7 +31,7 @@
 
         <header>
             <div class="header-left">
-                <img src="/image/LOGO.png" class="agri-logo" alt="AgriKnows Logo">
+                <img src="{{ asset ('images/LOGO.png') }}" class="agri-logo" alt="AgriKnows Logo">
                 <h1>AGRIKNOWS</h1>
             </div>
 
@@ -40,7 +40,7 @@
                     {{ session('user.username', 'Guest') }}
                 </span>
                 <img src="{{ asset('images/profile.png') }}" class="user-profile" alt="User Profile"
-                    onclick="window.location.href='{{ url('/user/settings') }}'">
+                    onclick="window.location.href='{{ url('/user-setting') }}'">
             </div>
 
         </header>
@@ -367,7 +367,7 @@
         </div>
     </div>
 
-    <script type="module" src="js/home.js"></script>
+    <script type="module" src="{{ asset('js/home.js') }}"></script>
     <footer>
         <p>© 2025 AgriKnows. All rights reserved.</p>
     </footer>

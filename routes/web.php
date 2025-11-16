@@ -21,7 +21,8 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/user-setting', function () {
     return view('user-setting');
-});
+})->name('user.setting');
+
 
 Route::get('/welcome', [TestController::class, 'showHistory']);
 

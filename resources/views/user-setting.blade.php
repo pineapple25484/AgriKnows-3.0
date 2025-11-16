@@ -20,7 +20,7 @@
           <div class="logo-title">
             
             <img src="{{ asset('images/LOGO.png') }}" class="agri-logo" alt="AgriKnows Logo"
-              onclick="window.location.href='/index.html'">
+              onclick="window.location.href='/welome'">
           </div>
           <h1>AGRIKNOWS</h1>
         </div>
@@ -30,7 +30,7 @@
       </header>
 
       <main class="settings-container">
-        <a href="/index.html" class="back-btn">← Back to Home</a>
+        <a href="{{ url('/welcome')}}" class="back-btn">← Back to Home</a>
         <h1>User Settings</h1>
 
         <section class="card">

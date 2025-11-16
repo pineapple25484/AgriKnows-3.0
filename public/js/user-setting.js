@@ -172,7 +172,7 @@ savePassBtn.addEventListener('click', async () => {
 document.getElementById('logout-btn').addEventListener('click', () => {
   signOut(auth).then(() => {
     alert('You have been logged out successfully.');
-    window.location.replace('/pages/login.html'); 
+    window.location.replace('/login'); 
   }).catch((error) => {
     alert('Error logging out: ' + error.message);
   });

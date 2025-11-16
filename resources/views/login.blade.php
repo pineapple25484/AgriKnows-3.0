@@ -37,11 +37,12 @@
               <input type="password" name="password" id="password" required>
           </div>
 
-          <button type="submit">LOG IN</button>
-
-          @if(session('error'))
+           @if(session('error'))
               <p style="color:red;">{{ session('error') }}</p>
           @endif
+
+          <button type="submit">LOG IN</button>
+
       </form>
 
 
@@ -49,7 +50,7 @@
     </div>
     
      <p class="signup">Don’t have an account?
-        <a href="/pages/signup.html">Sign up</a>
+        <a href="/register">Sign up</a>
       </p>
 
       <div class="authenticationBTN">
