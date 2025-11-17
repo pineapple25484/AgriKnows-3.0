@@ -20,7 +20,7 @@
         Mabuhay!
         <span>Welcome to AgriKnows</span>
         <br>
-        <small>CREATE AN ACCOUNT TO CONTINUE</small>
+        <small>GUMAWA NG ACCOUNT PARA MAGPATTULOY</small>
         <h2>Sign Up</h2>
       </header>
 
@@ -46,8 +46,8 @@
         <button type="submit">SIGN UP</button>
     </form>
     </div>
-    <p class="signup">Already have an account?
-      <a href="/pages/login.html">Log In</a>
+    <p class="signup">May account na?
+      <a href="/login">Log In</a>
     </p>
     <div class="authenticationBTN">
       <button id="google-login-btn">

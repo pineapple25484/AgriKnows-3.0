@@ -14,7 +14,7 @@ body {
 /* Left side */
 .left {
   flex: 1;
-  background: url('images/bg.png') no-repeat center center;
+  background: url("/images/bg.jpg") no-repeat center center;
   background-size: cover;
   display: flex;
   flex-direction: column;

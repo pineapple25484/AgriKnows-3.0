@@ -21,7 +21,7 @@
           Mabuhay!
           <span>Welcome to AgriKnows</span>
           <br>
-          <small>LOG IN TO YOUR ACCOUNT TO CONTINUE</small>
+          <small>MAG LOG IN PARA MAG PATULOY</small>
           <h2>LOG IN</h2>
         </header>
 
@@ -49,8 +49,8 @@
 
     </div>
     
-     <p class="signup">Don’t have an account?
-        <a href="/register">Sign up</a>
+     <p class="signup">Wala Pang Account?
+        <a href="/register">Gumawa ng Account</a>
       </p>
 
       <div class="authenticationBTN">
