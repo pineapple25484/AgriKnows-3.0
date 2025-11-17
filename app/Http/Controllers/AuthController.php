@@ -85,7 +85,6 @@ class AuthController extends Controller
             }
         }
 
-        // Login failed
         return back()->with('error', 'Invalid email or password!');
     }
 
